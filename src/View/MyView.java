@@ -31,6 +31,12 @@ public class MyView implements View {
 		out.println("maze " + name + " is ready");
 		out.flush();
 	}
+	
+	@Override
+	public void notifySolutionIsReady(String name) {
+		out.println("solution for " + name + " is ready");
+		out.flush();
+	}
 
 	@Override
 	public void displayMaze(Maze3d maze) {

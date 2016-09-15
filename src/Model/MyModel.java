@@ -6,8 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import algorithms.demo.MazeAdapter;
 import algorithms.mazeGenerators.GrowingTreeGenerator;
 import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
+import algorithms.search.BFS;
+import algorithms.search.CommonSearcher;
+import algorithms.search.DFS;
+import algorithms.search.Solution;
 import Controller.Controller;
 
 public class MyModel implements Model {
@@ -40,8 +46,45 @@ public class MyModel implements Model {
 		}		
 	}
 	
+	private List<SolveMazeRunnable> solveMazeTasks = new ArrayList<SolveMazeRunnable>();
+	
+	class SolveMazeRunnable implements Runnable {
+
+		CommonSearcher<Position> searcher;
+		
+		private String algorithm;
+		private MazeAdapter adapter;
+		private String name;
+		public SolveMazeRunnable(String name, Maze3d maze, String algorithm) {
+			this.adapter = new MazeAdapter(maze);
+			this.algorithm = algorithm;
+			this.name = name;
+		}
+		
+		@Override
+		public void run() {
+			if (algorithm == "BFS") {
+				searcher = new BFS<Position>();
+			}
+			else if (algorithm == "DFS") {
+				searcher = new DFS<Position>();
+			} 
+			
+			Solution<Position> solution = searcher.search(adapter);
+			
+			solutions.put(name, solution);
+			
+			controller.notifySolutionIsReady(name);			
+		}
+		
+		public void terminate() {
+			searcher.setDone(true);
+		}		
+	}
+	
 	private Controller controller;	
 	private Map<String, Maze3d> mazes = new ConcurrentHashMap<String, Maze3d>();
+	private Map<String, Solution<Position>> solutions = new ConcurrentHashMap<String, Solution<Position>>();
 	
 	private List<Thread> threads = new ArrayList<Thread>();
 	
@@ -58,6 +101,16 @@ public class MyModel implements Model {
 		thread.start();
 		threads.add(thread);		
 	}
+	
+	@Override
+	public void solveMaze(String name, String algorithm) {
+		Maze3d maze = getMaze(name);
+		SolveMazeRunnable solveMaze = new SolveMazeRunnable( name, maze, algorithm);
+		solveMazeTasks.add(solveMaze);
+		Thread thread = new Thread(solveMaze);
+		thread.start();
+		threads.add(thread);		
+	}
 
 	@Override
 	public Maze3d getMaze(String name) {
@@ -66,6 +119,9 @@ public class MyModel implements Model {
 	
 	public void exit() {
 		for (GenerateMazeRunnable task : generateMazeTasks) {
+			task.terminate();
+		}
+		for (SolveMazeRunnable task : solveMazeTasks) {
 			task.terminate();
 		}
 	}

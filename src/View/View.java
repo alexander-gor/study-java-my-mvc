@@ -12,4 +12,5 @@ public interface View {
 	void setCommands(HashMap<String, Command> commands);
 	void start();
 	void setController(Controller controller);
+	void notifySolutionIsReady(String name);
 }
