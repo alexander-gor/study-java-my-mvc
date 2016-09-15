@@ -12,10 +12,9 @@ public class CLI {
 	private PrintWriter out;
 	private HashMap<String, Command> commands;
 	private View view;
-	public CLI(BufferedReader in, PrintWriter out, View view) {
+	public CLI(BufferedReader in, PrintWriter out) {
 		this.in = in;
 		this.out = out;		
-		this.view = view;
 	}
 	
 	private void printMenu() {

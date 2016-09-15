@@ -186,4 +186,9 @@ public class MyModel implements Model {
 		
 	}
 
+	@Override
+	public Solution<Position> getSolution(String name) {
+		return solutions.get(name);
+	}
+
 }

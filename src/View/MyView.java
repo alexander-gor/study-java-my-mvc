@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 
 import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 import Controller.Command;
 import Controller.Controller;
 
@@ -20,7 +22,7 @@ public class MyView implements View {
 		this.in = in;
 		this.out = out;
 				
-		cli = new CLI(in, out, this);
+		cli = new CLI(in, out);
 	}
 	
 	public void setController(Controller controller) {
@@ -54,12 +56,6 @@ public class MyView implements View {
 	public void start() {
 		// TODO Auto-generated method stub
 		cli.start();
-	}
-	
-	@Override
-	public void notifyExit() {
-		// TODO Auto-generated method stub
-		controller.notifyExit();
 	}
 
 	@Override
@@ -104,8 +100,18 @@ public class MyView implements View {
 				for (int y = 0; y < yLen ; y++) {
 					sb.append(crossSection[x][y]);
 				}
+				sb.append("\n");
 			}
+			out.println(sb.toString());
+			out.flush();
 		}
+	}
+
+	@Override
+	public void displaySolution(Solution<Position> solution) {
+		out.println(solution);
+		out.flush();
+		
 	}
 
 }

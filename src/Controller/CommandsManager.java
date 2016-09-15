@@ -3,6 +3,8 @@ package Controller;
 import java.util.HashMap;
 
 import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 import Model.Model;
 import View.View;
 
@@ -25,9 +27,31 @@ public class CommandsManager {
 		commands.put("save_maze", new SaveMazeCommand());
 		commands.put("load_maze", new LoadMazeCommand());
 		commands.put("solve_maze", new SolveMazeCommand());
+		commands.put("display_solution", new DisplaySolutionCommand());
+		commands.put("exit", new ExitCommand());
 		
 		
 		return commands;
+	}
+	
+	public class ExitCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			model.exit();
+		}
+		
+	}
+	
+	public class DisplaySolutionCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			String name = args[0]; 
+			Solution<Position> solution = model.getSolution(name);
+			view.displaySolution(solution);
+		}
+		
 	}
 	
 	public class SolveMazeCommand implements Command {
