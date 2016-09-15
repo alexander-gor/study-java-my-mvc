@@ -13,6 +13,6 @@ public interface Model {
 	void exit();
 	void setController(Controller controller);
 	void saveMaze(String name, String fileName);
-	void loadMaze(String name, String fileName);
+	void loadMaze(String fileName, String name);
 	
 }

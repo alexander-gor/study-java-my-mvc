@@ -71,10 +71,10 @@ public class MyModel implements Model {
 		
 		@Override
 		public void run() {
-			if (algorithm == "BFS") {
+			if (algorithm.equals("BFS")) {
 				searcher = new BFS<Position>();
 			}
-			else if (algorithm == "DFS") {
+			else if (algorithm.equals("DFS")) {
 				searcher = new DFS<Position>();
 			} 
 			
@@ -161,11 +161,11 @@ public class MyModel implements Model {
 	}
 
 	@Override
-	public void loadMaze(String name, String fileName) {
+	public void loadMaze(String fileName, String name) {
 		InputStream in;
 		try {
 			in = new MyDecompressorInputStream(
-				new FileInputStream("1.maz"));
+				new FileInputStream(fileName));
 			int size = in.read();			
 			byte b[]=new byte[size];
 			in.read(b);
@@ -173,8 +173,6 @@ public class MyModel implements Model {
 			
 			Maze3d loaded = new Maze3d(b);
 			mazes.put(name, loaded);
-			System.out.println("maze loaded from file:");
-			System.out.println(loaded);
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
