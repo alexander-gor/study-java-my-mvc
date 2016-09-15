@@ -14,4 +14,5 @@ public interface View {
 	void setController(Controller controller);
 	void notifySolutionIsReady(String name);
 	void notifyExit();
+	void displayDir(String dirName);
 }

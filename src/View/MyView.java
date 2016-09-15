@@ -1,6 +1,7 @@
 package View;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
@@ -59,6 +60,20 @@ public class MyView implements View {
 	public void notifyExit() {
 		// TODO Auto-generated method stub
 		controller.notifyExit();
+	}
+
+	@Override
+	public void displayDir(String dirName) {
+		File folder = new File(dirName);
+		File[] listOfFiles = folder.listFiles();
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isFile()) {
+				out.println("File " + listOfFiles[i].getName());
+			} else if (listOfFiles[i].isDirectory()) {
+				out.println("Directory " + listOfFiles[i].getName());
+			}
+		}	
 	}
 
 }

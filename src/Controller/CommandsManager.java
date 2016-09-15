@@ -18,8 +18,10 @@ public class CommandsManager {
 	
 	public HashMap<String, Command> getCommandsMap() {
 		HashMap<String, Command> commands = new HashMap<String, Command>();
+		commands.put("dir", new DisplayDirCommand());
 		commands.put("generate_3d_maze", new GenerateMazeCommand());
 		commands.put("display", new DisplayMazeCommand());
+		
 		
 		return commands;
 	}
@@ -43,6 +45,16 @@ public class CommandsManager {
 			String name = args[0];
 			Maze3d maze = model.getMaze(name);
 			view.displayMaze(maze);
+		}
+		
+	}
+	
+	public class DisplayDirCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			String dirName = args[0];
+			view.displayDir(dirName);
 		}
 		
 	}
