@@ -21,9 +21,23 @@ public class CommandsManager {
 		commands.put("dir", new DisplayDirCommand());
 		commands.put("generate_3d_maze", new GenerateMazeCommand());
 		commands.put("display", new DisplayMazeCommand());
+		commands.put("display_cross_section", new DisplayCrossSectionCommand());
 		
 		
 		return commands;
+	}
+	
+	public class DisplayCrossSectionCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			int index = Integer.parseInt(args[0]);
+			String axis = args[1];
+			String name = args[2];
+			Maze3d maze = model.getMaze(name);
+			view.displayCrossSectionBy(index, axis, maze);
+		}
+		
 	}
 	
 	public class GenerateMazeCommand implements Command {

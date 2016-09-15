@@ -74,6 +74,38 @@ public class MyView implements View {
 				out.println("Directory " + listOfFiles[i].getName());
 			}
 		}	
+	} 
+
+	@Override
+	public void displayCrossSectionBy(int index, String axis, Maze3d maze) {
+		int[][] crossSection = null;
+		switch (axis) {
+		case "X":
+		case "x":
+			crossSection = maze.getCrossSectionByX(index);
+			break;
+		case "Y":
+		case "y":
+			crossSection = maze.getCrossSectionByY(index);
+			break;
+		case "Z":
+		case "z":
+			crossSection = maze.getCrossSectionByZ(index);
+			break;
+
+		default:
+			break;
+		}
+		if (crossSection != null) {
+			int xLen = crossSection.length;
+			int yLen = crossSection[0].length;
+			StringBuilder sb = new StringBuilder();
+			for (int x = 0; x < xLen ; x++) {
+				for (int y = 0; y < yLen ; y++) {
+					sb.append(crossSection[x][y]);
+				}
+			}
+		}
 	}
 
 }

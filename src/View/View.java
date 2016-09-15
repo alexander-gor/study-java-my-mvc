@@ -15,4 +15,5 @@ public interface View {
 	void notifySolutionIsReady(String name);
 	void notifyExit();
 	void displayDir(String dirName);
+	void displayCrossSectionBy(int index, String axis, Maze3d maze);
 }
