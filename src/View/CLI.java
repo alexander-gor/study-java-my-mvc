@@ -11,7 +11,6 @@ public class CLI {
 	private BufferedReader in;
 	private PrintWriter out;
 	private HashMap<String, Command> commands;
-	private View view;
 	public CLI(BufferedReader in, PrintWriter out) {
 		this.in = in;
 		this.out = out;		

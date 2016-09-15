@@ -13,9 +13,11 @@ import Controller.Controller;
 
 public class MyView implements View {
 	
+	@SuppressWarnings("unused")
 	private BufferedReader in;
 	private PrintWriter out;
 	private CLI cli;
+	@SuppressWarnings("unused")
 	private Controller controller;
 
 	public MyView(BufferedReader in, PrintWriter out) {
