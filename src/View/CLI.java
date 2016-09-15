@@ -11,10 +11,11 @@ public class CLI {
 	private BufferedReader in;
 	private PrintWriter out;
 	private HashMap<String, Command> commands;
-	
-	public CLI(BufferedReader in, PrintWriter out) {
+	private View view;
+	public CLI(BufferedReader in, PrintWriter out, View view) {
 		this.in = in;
 		this.out = out;		
+		this.view = view;
 	}
 	
 	private void printMenu() {

@@ -31,5 +31,10 @@ public class MyController implements Controller {
 	public void notifySolutionIsReady(String name) {
 		view.notifySolutionIsReady(name);
 	}
+	
+	@Override
+	public void notifyExit() {
+		model.exit();
+	}
 
 }

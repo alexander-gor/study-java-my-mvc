@@ -13,4 +13,5 @@ public interface View {
 	void start();
 	void setController(Controller controller);
 	void notifySolutionIsReady(String name);
+	void notifyExit();
 }

@@ -18,7 +18,7 @@ public class CommandsManager {
 	
 	public HashMap<String, Command> getCommandsMap() {
 		HashMap<String, Command> commands = new HashMap<String, Command>();
-		commands.put("generate_maze", new GenerateMazeCommand());
+		commands.put("generate_3d_maze", new GenerateMazeCommand());
 		commands.put("display", new DisplayMazeCommand());
 		
 		return commands;

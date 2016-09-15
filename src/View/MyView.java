@@ -19,7 +19,7 @@ public class MyView implements View {
 		this.in = in;
 		this.out = out;
 				
-		cli = new CLI(in, out);
+		cli = new CLI(in, out, this);
 	}
 	
 	public void setController(Controller controller) {
@@ -53,6 +53,12 @@ public class MyView implements View {
 	public void start() {
 		// TODO Auto-generated method stub
 		cli.start();
+	}
+	
+	@Override
+	public void notifyExit() {
+		// TODO Auto-generated method stub
+		controller.notifyExit();
 	}
 
 }
