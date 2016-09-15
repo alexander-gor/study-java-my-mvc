@@ -1,5 +1,11 @@
 package Model;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +20,8 @@ import algorithms.search.BFS;
 import algorithms.search.CommonSearcher;
 import algorithms.search.DFS;
 import algorithms.search.Solution;
+import io.MyCompressorOutputStream;
+import io.MyDecompressorInputStream;
 import Controller.Controller;
 
 public class MyModel implements Model {
@@ -124,6 +132,58 @@ public class MyModel implements Model {
 		for (SolveMazeRunnable task : solveMazeTasks) {
 			task.terminate();
 		}
+	}
+
+	@Override
+	public void saveMaze(String name, String fileName) {
+		// save it to a file
+		Maze3d maze = getMaze(name);
+		OutputStream out;
+		try {
+			out = new MyCompressorOutputStream(
+					new FileOutputStream(fileName));
+			byte[] arr = maze.toByteArray();
+			
+			out.write(arr.length);
+			out.write(arr);
+			out.flush();
+			out.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+				
+				
+		
+	}
+
+	@Override
+	public void loadMaze(String name, String fileName) {
+		InputStream in;
+		try {
+			in = new MyDecompressorInputStream(
+				new FileInputStream("1.maz"));
+			int size = in.read();			
+			byte b[]=new byte[size];
+			in.read(b);
+			in.close();	
+			
+			Maze3d loaded = new Maze3d(b);
+			mazes.put(name, loaded);
+			System.out.println("maze loaded from file:");
+			System.out.println(loaded);
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

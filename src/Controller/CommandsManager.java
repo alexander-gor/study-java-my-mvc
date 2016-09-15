@@ -22,9 +22,35 @@ public class CommandsManager {
 		commands.put("generate_3d_maze", new GenerateMazeCommand());
 		commands.put("display", new DisplayMazeCommand());
 		commands.put("display_cross_section", new DisplayCrossSectionCommand());
+		commands.put("save_maze", new SaveMazeCommand());
+		commands.put("load_maze", new LoadMazeCommand());
 		
 		
 		return commands;
+	}
+	
+	public class SaveMazeCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			String name = args[0];
+			String fileName = args[1];
+			
+			model.saveMaze(name, fileName);
+		}
+		
+	}
+	
+	public class LoadMazeCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			String name = args[0];
+			String fileName = args[1];
+			
+			model.loadMaze(name, fileName);
+		}
+		
 	}
 	
 	public class DisplayCrossSectionCommand implements Command {
