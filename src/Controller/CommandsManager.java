@@ -24,9 +24,22 @@ public class CommandsManager {
 		commands.put("display_cross_section", new DisplayCrossSectionCommand());
 		commands.put("save_maze", new SaveMazeCommand());
 		commands.put("load_maze", new LoadMazeCommand());
+		commands.put("solve_maze", new SolveMazeCommand());
 		
 		
 		return commands;
+	}
+	
+	public class SolveMazeCommand implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			String name = args[0];
+			String algorithm = args[1];
+			
+			model.solveMaze(name, algorithm);
+		}
+		
 	}
 	
 	public class SaveMazeCommand implements Command {
