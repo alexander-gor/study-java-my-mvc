@@ -23,15 +23,47 @@ import algorithms.search.Solution;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 
+/**
+ * class that implements the model interface
+ * @author Administrator
+ *
+ */
 public class MyModel implements Model {
-	
+	//controller reference
+	private Controller controller;
+	//cached mazes
+	private Map<String, Maze3d> mazes = new ConcurrentHashMap<String, Maze3d>();
+	//cached solutions
+	private Map<String, Solution<Position>> solutions = new ConcurrentHashMap<String, Solution<Position>>();
+	//list of all running threads
+	private List<Thread> threads = new ArrayList<Thread>();
+	//all tasks to generate a maze
 	private List<GenerateMazeRunnable> generateMazeTasks = new ArrayList<GenerateMazeRunnable>();
-	
+	//all tasks to solve a maze
+	private List<SolveMazeRunnable> solveMazeTasks = new ArrayList<SolveMazeRunnable>();
+	//OutputStream reference to close if exit
+	private OutputStream saveFile;
+	//InputStream reference to close if exit
+	private InputStream loadFile;
+	/**
+	 * class that defines a asynchronous task that generates a maze
+	 * @author Administrator
+	 *
+	 */
 	class GenerateMazeRunnable implements Runnable {
-
+		//maze sizes
 		private int x, y, z;
+		//maze name
 		private String name;
+		//generator used
 		private GrowingTreeGenerator generator;
+		/**
+		 * GenerateMazeRunnable c'tor
+		 * @param x x axis length
+		 * @param y y axis length
+		 * @param z z axis length
+		 * @param name maze name
+		 */
 		public GenerateMazeRunnable(int x, int y, int z, String name) {
 			this.x = x;
 			this.y = y;
@@ -40,6 +72,9 @@ public class MyModel implements Model {
 		}
 		
 		@Override
+		/**
+		 * generates the maze, then notifies when ready
+		 */
 		public void run() {
 			generator = new GrowingTreeGenerator();
 			Maze3d maze = generator.generate(x, y, z);
@@ -47,21 +82,31 @@ public class MyModel implements Model {
 			
 			controller.notifyMazeIsReady(name);			
 		}
-		
+		//stops the generator if task need to finish
 		public void terminate() {
 			generator.setDone(true);
 		}		
 	}
-	
-	private List<SolveMazeRunnable> solveMazeTasks = new ArrayList<SolveMazeRunnable>();
-	
+	/**
+	 * class that defines a asynchronous task that solves a maze
+	 * @author Administrator
+	 *
+	 */
 	class SolveMazeRunnable implements Runnable {
-
+		//the searcher
 		CommonSearcher<Position> searcher;
-		
+		//desired algorithm
 		private String algorithm;
+		//maze adapter
 		private MazeAdapter adapter;
+		//maze name
 		private String name;
+		/**
+		 * c'tor
+		 * @param name maze name 
+		 * @param maze the maze
+		 * @param algorithm deired algorithm, DFS/BFS
+		 */
 		public SolveMazeRunnable(String name, Maze3d maze, String algorithm) {
 			this.adapter = new MazeAdapter(maze);
 			this.algorithm = algorithm;
@@ -69,11 +114,14 @@ public class MyModel implements Model {
 		}
 		
 		@Override
+		/**
+		 * solves the maze, then notifies when ready
+		 */
 		public void run() {
-			if (algorithm.equals("BFS")) {
+			if (algorithm.toLowerCase().equals("bfs")) {
 				searcher = new BFS<Position>();
 			}
-			else if (algorithm.equals("DFS")) {
+			else if (algorithm.toLowerCase().equals("dfs")) {
 				searcher = new DFS<Position>();
 			} 
 			
@@ -83,24 +131,27 @@ public class MyModel implements Model {
 			
 			controller.notifySolutionIsReady(name);			
 		}
-		
+		//stops the solver if task need to finish
 		public void terminate() {
 			searcher.setDone(true);
 		}		
 	}
-	
-	private Controller controller;	
-	private Map<String, Maze3d> mazes = new ConcurrentHashMap<String, Maze3d>();
-	private Map<String, Solution<Position>> solutions = new ConcurrentHashMap<String, Solution<Position>>();
-	
-	private List<Thread> threads = new ArrayList<Thread>();
-	
-	
+	/**
+	 * setter for the controller
+	 * @param controller the controller
+	 */
 	public void setController(Controller controller) {
 		this.controller = controller;
 	}
 	
 	@Override
+	/**
+	 * generates the maze
+	 * @param name maze name
+	 * @param x x axis length
+	 * @param y y axis length
+	 * @param z z axis length
+	 */
 	public void generateMaze(String name, int x, int y, int z) {
 		GenerateMazeRunnable generateMaze = new GenerateMazeRunnable(x, y, z, name);
 		generateMazeTasks.add(generateMaze);
@@ -110,6 +161,11 @@ public class MyModel implements Model {
 	}
 	
 	@Override
+	/**
+	 * solves the maze using an algorithm
+	 * @param name maze name
+	 * @param algorithm algorithm, BFS/DFS
+	 */
 	public void solveMaze(String name, String algorithm) {
 		Maze3d maze = getMaze(name);
 		SolveMazeRunnable solveMaze = new SolveMazeRunnable( name, maze, algorithm);
@@ -120,10 +176,17 @@ public class MyModel implements Model {
 	}
 
 	@Override
+	/**
+	 * returns a maze
+	 * @param name maze name
+	 * @return the maze
+	 */
 	public Maze3d getMaze(String name) {
 		return mazes.get(name);
 	}
-	
+	/**
+	 * stops all tasks, closes files
+	 */
 	public void exit() {
 		for (GenerateMazeRunnable task : generateMazeTasks) {
 			task.terminate();
@@ -131,22 +194,37 @@ public class MyModel implements Model {
 		for (SolveMazeRunnable task : solveMazeTasks) {
 			task.terminate();
 		}
+		try {
+			saveFile.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			loadFile.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
+	/**
+	 * saves the maze to a file
+	 * @param name maze name
+	 * @param fileName file name 
+	 */
 	public void saveMaze(String name, String fileName) {
 		// save it to a file
 		Maze3d maze = getMaze(name);
-		OutputStream out;
+		
 		try {
-			out = new MyCompressorOutputStream(
+			saveFile = new MyCompressorOutputStream(
 					new FileOutputStream(fileName));
 			byte[] arr = maze.toByteArray();
 			
-			out.write(arr.length);
-			out.write(arr);
-			out.flush();
-			out.close();
+			saveFile.write(arr.length);
+			saveFile.write(arr);
+			saveFile.flush();
+			saveFile.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -154,21 +232,23 @@ public class MyModel implements Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
-				
-				
-		
 	}
 
 	@Override
+	/**
+	 * loads the maze from a file
+	 * @param fileName file name
+	 * @param name maze name
+	 */
 	public void loadMaze(String fileName, String name) {
-		InputStream in;
+		
 		try {
-			in = new MyDecompressorInputStream(
+			loadFile = new MyDecompressorInputStream(
 				new FileInputStream(fileName));
-			int size = in.read();			
+			int size = loadFile.read();			
 			byte b[]=new byte[size];
-			in.read(b);
-			in.close();	
+			loadFile.read(b);
+			loadFile.close();	
 			
 			Maze3d loaded = new Maze3d(b);
 			mazes.put(name, loaded);
@@ -180,10 +260,14 @@ public class MyModel implements Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
+	/**
+	 * returns the solution for a maze
+	 * @param name maze name
+	 * @return the solution for a maze
+	 */
 	public Solution<Position> getSolution(String name) {
 		return solutions.get(name);
 	}

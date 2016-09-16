@@ -7,17 +7,29 @@ import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 import Model.Model;
 import View.View;
-
+/**
+ * class that defines which commands will be set
+ * @author Administrator
+ *
+ */
 public class CommandsManager {
 	
 	private Model model;
 	private View view;
 	private HashMap<String, CommandBase> commands;
+	/**
+	 * CommandsManager ctor
+	 * @param model that is used
+	 * @param view that is used
+	 */
 	public CommandsManager(Model model, View view) {
 		this.model = model;
 		this.view = view;		
 	}
-	
+	/**
+	 * initializes commands
+	 * @return command map
+	 */
 	public HashMap<String, CommandBase> getCommandsMap() {
 		commands = new HashMap<String, CommandBase>();
 		
@@ -44,7 +56,11 @@ public class CommandsManager {
 		
 		return commands;
 	}
-	
+	/**
+	 * class for the help command
+	 * @author Administrator
+	 *
+	 */
 	public class HelpCommand extends CommandBase {
 
 		@Override
@@ -55,7 +71,11 @@ public class CommandsManager {
 		}
 		
 	}
-	
+	/**
+	 * class for the exit command
+	 * @author Administrator
+	 *
+	 */
 	public class ExitCommand extends CommandBase {
 
 		@Override
@@ -64,7 +84,11 @@ public class CommandsManager {
 		}
 		
 	}
-	
+	/**
+	 * class for the display_solution command
+	 * @author Administrator
+	 *
+	 */
 	public class DisplaySolutionCommand extends CommandBase {
 
 		@Override
@@ -75,7 +99,11 @@ public class CommandsManager {
 		}
 		
 	}
-	
+	/**
+	 * class for the solve command
+	 * @author Administrator
+	 *
+	 */
 	public class SolveMazeCommand extends CommandBase {
 
 		@Override
@@ -87,7 +115,11 @@ public class CommandsManager {
 		}
 		
 	}
-	
+	/**
+	 * class for the save_maze command
+	 * @author Administrator
+	 *
+	 */
 	public class SaveMazeCommand extends CommandBase {
 
 		@Override
@@ -99,7 +131,11 @@ public class CommandsManager {
 		}
 		
 	}
-	
+	/**
+	 * class for the load_maze command
+	 * @author Administrator
+	 *
+	 */
 	public class LoadMazeCommand extends CommandBase {
 
 		@Override
@@ -111,7 +147,11 @@ public class CommandsManager {
 		}
 		
 	}
-	
+	/**
+	 * class for the display_cross_section command
+	 * @author Administrator
+	 *
+	 */
 	public class DisplayCrossSectionCommand extends CommandBase {
 
 		@Override
@@ -124,7 +164,11 @@ public class CommandsManager {
 		}
 		
 	}
-	
+	/**
+	 * class for the generate_3d_maze command
+	 * @author Administrator
+	 *
+	 */
 	public class GenerateMazeCommand extends CommandBase {
 
 		@Override
@@ -136,7 +180,11 @@ public class CommandsManager {
 			model.generateMaze(name, x, y, z);
 		}		
 	}
-	
+	/**
+	 * class for the display command
+	 * @author Administrator
+	 *
+	 */
 	public class DisplayMazeCommand extends CommandBase {
 
 		@Override
@@ -147,7 +195,11 @@ public class CommandsManager {
 		}
 		
 	}
-	
+	/**
+	 * class for the dir command
+	 * @author Administrator
+	 *
+	 */
 	public class DisplayDirCommand extends CommandBase {
 
 		@Override

@@ -10,9 +10,15 @@ import Model.Model;
 import Model.MyModel;
 import View.MyView;
 import View.View;
-
+/**
+ * class that holds the demo functions
+ * @author Administrator
+ *
+ */
 public class Demo {
-
+	/**
+	 * run the demo
+	 */
 	public void run() {	
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
