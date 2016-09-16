@@ -8,7 +8,7 @@ import java.util.HashMap;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
-import Controller.Command;
+import Controller.CommandBase;
 import Controller.Controller;
 
 public class MyView implements View {
@@ -50,7 +50,7 @@ public class MyView implements View {
 	}
 
 	@Override
-	public void setCommands(HashMap<String, Command> commands) {
+	public void setCommands(HashMap<String, CommandBase> commands) {
 		cli.setCommands(commands);
 	}
 
@@ -114,6 +114,12 @@ public class MyView implements View {
 		out.println(solution);
 		out.flush();
 		
+	}
+
+	@Override
+	public void showText(String text) {
+		out.println(text);
+		out.flush();
 	}
 
 }

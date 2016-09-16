@@ -12,29 +12,51 @@ public class CommandsManager {
 	
 	private Model model;
 	private View view;
-		
+	private HashMap<String, CommandBase> commands;
 	public CommandsManager(Model model, View view) {
 		this.model = model;
 		this.view = view;		
 	}
 	
-	public HashMap<String, Command> getCommandsMap() {
-		HashMap<String, Command> commands = new HashMap<String, Command>();
-		commands.put("dir", new DisplayDirCommand());
-		commands.put("generate_3d_maze", new GenerateMazeCommand());
-		commands.put("display", new DisplayMazeCommand());
-		commands.put("display_cross_section", new DisplayCrossSectionCommand());
-		commands.put("save_maze", new SaveMazeCommand());
-		commands.put("load_maze", new LoadMazeCommand());
-		commands.put("solve_maze", new SolveMazeCommand());
-		commands.put("display_solution", new DisplaySolutionCommand());
-		commands.put("exit", new ExitCommand());
+	public HashMap<String, CommandBase> getCommandsMap() {
+		commands = new HashMap<String, CommandBase>();
 		
+		commands.put("dir", new DisplayDirCommand());
+		commands.get("dir").setSyntax("dir <path>\nprints directory structure");
+		commands.put("generate_3d_maze", new GenerateMazeCommand());
+		commands.get("generate_3d_maze").setSyntax("generate_3d_maze <name> <x> <y> <z>\ngenerates a maze");
+		commands.put("display", new DisplayMazeCommand());
+		commands.get("display").setSyntax("display <name>\ndisplays a maze");
+		commands.put("display_cross_section", new DisplayCrossSectionCommand());
+		commands.get("display_cross_section").setSyntax("display_cross_section <index> <x/y/z> <name>\ndisplays a cross section by X/Y/Z at a index");
+		commands.put("save_maze", new SaveMazeCommand());
+		commands.get("save_maze").setSyntax("save_maze <name> <fileName>\nsaves the maze in a file");
+		commands.put("load_maze", new LoadMazeCommand());
+		commands.get("load_maze").setSyntax("load_maze <fileName> <name>\nloads a maze from a file");
+		commands.put("solve_maze", new SolveMazeCommand());
+		commands.get("solve_maze").setSyntax("solve_maze <name> <BFS/DFS>\nsolves a maze using a certain algorithm");
+		commands.put("display_solution", new DisplaySolutionCommand());
+		commands.get("display_solution").setSyntax("display_solution <name>\ndisplays a solution to a maze");
+		commands.put("help", new ExitCommand());
+		commands.get("help").setSyntax("help\nprints help window");
+		commands.put("exit", new ExitCommand());
+		commands.get("exit").setSyntax("exit\n exits CLI");
 		
 		return commands;
 	}
 	
-	public class ExitCommand implements Command {
+	public class HelpCommand extends CommandBase {
+
+		@Override
+		public void doCommand(String[] args) {
+			for (String command : commands.keySet()) {
+				view.showText(commands.get(command).getSyntax());
+			}
+		}
+		
+	}
+	
+	public class ExitCommand extends CommandBase {
 
 		@Override
 		public void doCommand(String[] args) {
@@ -43,7 +65,7 @@ public class CommandsManager {
 		
 	}
 	
-	public class DisplaySolutionCommand implements Command {
+	public class DisplaySolutionCommand extends CommandBase {
 
 		@Override
 		public void doCommand(String[] args) {
@@ -54,7 +76,7 @@ public class CommandsManager {
 		
 	}
 	
-	public class SolveMazeCommand implements Command {
+	public class SolveMazeCommand extends CommandBase {
 
 		@Override
 		public void doCommand(String[] args) {
@@ -66,7 +88,7 @@ public class CommandsManager {
 		
 	}
 	
-	public class SaveMazeCommand implements Command {
+	public class SaveMazeCommand extends CommandBase {
 
 		@Override
 		public void doCommand(String[] args) {
@@ -78,7 +100,7 @@ public class CommandsManager {
 		
 	}
 	
-	public class LoadMazeCommand implements Command {
+	public class LoadMazeCommand extends CommandBase {
 
 		@Override
 		public void doCommand(String[] args) {
@@ -90,7 +112,7 @@ public class CommandsManager {
 		
 	}
 	
-	public class DisplayCrossSectionCommand implements Command {
+	public class DisplayCrossSectionCommand extends CommandBase {
 
 		@Override
 		public void doCommand(String[] args) {
@@ -103,7 +125,7 @@ public class CommandsManager {
 		
 	}
 	
-	public class GenerateMazeCommand implements Command {
+	public class GenerateMazeCommand extends CommandBase {
 
 		@Override
 		public void doCommand(String[] args) {
@@ -115,7 +137,7 @@ public class CommandsManager {
 		}		
 	}
 	
-	public class DisplayMazeCommand implements Command {
+	public class DisplayMazeCommand extends CommandBase {
 
 		@Override
 		public void doCommand(String[] args) {
@@ -126,7 +148,7 @@ public class CommandsManager {
 		
 	}
 	
-	public class DisplayDirCommand implements Command {
+	public class DisplayDirCommand extends CommandBase {
 
 		@Override
 		public void doCommand(String[] args) {

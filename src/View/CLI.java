@@ -4,13 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-
-import Controller.Command;
+import Controller.CommandBase;
 
 public class CLI {
 	private BufferedReader in;
 	private PrintWriter out;
-	private HashMap<String, Command> commands;
+	private HashMap<String, CommandBase> commands;
 	public CLI(BufferedReader in, PrintWriter out) {
 		this.in = in;
 		this.out = out;		
@@ -48,23 +47,29 @@ public class CLI {
 										commandLine.indexOf(" ") + 1);
 								args = commandArgs.split(" ");							
 							}
-							Command cmd = commands.get(command);
-							cmd.doCommand(args);				
-							
+							CommandBase cmd = commands.get(command);
+							try{
+								cmd.doCommand(args);	
+							}
+							catch (Exception e) {
+								e.printStackTrace();
+								out.println(command + " syntax incorrect");
+								out.println(cmd.getSyntax());
+							}
 							if (command.equals("exit"))
 								break;
 						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+					} 
 				}
 			}			
 		});
 		thread.start();		
 	}
 	
-	public void setCommands(HashMap<String, Command> commands) {
+	public void setCommands(HashMap<String, CommandBase> commands) {
 		this.commands = commands;
 	}
 }
