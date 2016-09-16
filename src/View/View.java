@@ -39,7 +39,7 @@ public interface View {
 	void setController(Controller controller);
 	/**
 	 * notifies solution is ready
-	 * @param name
+	 * @param name maze name
 	 */
 	void notifySolutionIsReady(String name);
 	/**
