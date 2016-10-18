@@ -11,7 +11,7 @@ import algorithms.search.Solution;
 import Controller.CommandBase;
 import Controller.Controller;
 
-public class MyView implements View {
+public class CLIView implements View {
 	
 	@SuppressWarnings("unused")
 	//reader
@@ -28,7 +28,7 @@ public class MyView implements View {
 	 * @param in reader
 	 * @param out writer
 	 */
-	public MyView(BufferedReader in, PrintWriter out) {
+	public CLIView(BufferedReader in, PrintWriter out) {
 		this.in = in;
 		this.out = out;
 				

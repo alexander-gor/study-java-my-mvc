@@ -8,7 +8,7 @@ import Controller.Controller;
 import Controller.MyController;
 import Model.Model;
 import Model.MyModel;
-import View.MyView;
+import View.CLIView;
 import View.View;
 /**
  * class that holds the demo functions
@@ -24,7 +24,7 @@ public class Demo {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		PrintWriter out = new PrintWriter(System.out);
 				
-		View view = new MyView(in, out);
+		View view = new CLIView(in, out);
 		Model model = new MyModel();
 		
 		Controller controller = new MyController(view, model);
