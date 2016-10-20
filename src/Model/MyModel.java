@@ -29,6 +29,7 @@ import io.MyDecompressorInputStream;
  *
  */
 public class MyModel implements Model {
+	private static final String RESOURCESDIR = "Resources\\";
 	//controller reference
 	private Controller controller;
 	//cached mazes
@@ -218,7 +219,7 @@ public class MyModel implements Model {
 		
 		try {
 			saveFile = new MyCompressorOutputStream(
-					new FileOutputStream(fileName));
+					new FileOutputStream(RESOURCESDIR + fileName));
 			byte[] arr = maze.toByteArray();
 			
 			saveFile.write(arr.length);
@@ -244,7 +245,7 @@ public class MyModel implements Model {
 		
 		try {
 			loadFile = new MyDecompressorInputStream(
-				new FileInputStream(fileName));
+				new FileInputStream(RESOURCESDIR + fileName));
 			int size = loadFile.read();			
 			byte b[]=new byte[size];
 			loadFile.read(b);
